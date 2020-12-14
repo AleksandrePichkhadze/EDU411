@@ -1,0 +1,22 @@
+{
+    "name": "scandipwa/installer",
+    "description": "ScandiPWA bootstrap module",
+    "type": "magento2-theme",
+    "license": [
+        "OSL-3.0"
+    ],
+    "require": {
+        "magento/framework": "*",
+        "magento/module-theme": "*",
+        "scandipwa/source": "^3"
+    },
+    "autoload": {
+        "files": [
+            "src/cli_commands.php",
+            "src/registration.php"
+        ],
+        "psr-4": {
+            "ScandiPWA\\Installer\\": "src"
+        }
+    }
+}

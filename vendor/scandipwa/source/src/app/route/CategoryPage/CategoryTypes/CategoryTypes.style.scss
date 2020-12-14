@@ -1,0 +1,11 @@
+.CategoryTypes{
+    height: 41px;
+    background-color: var(--primary-base-color);
+    text-align: center;
+    &-Text{
+        font-size: 14px;
+    text-transform: uppercase;
+    color: white;
+    font-weight: bold;
+    }
+}

@@ -1,0 +1,11 @@
+<fieldset class="fieldset create account" data-hasrequired="<?php /* @escapeNotVerified */echo __('* Required Fields') ?>">
+    <br>
+    <div class="field personal_code required">
+        <label class="label" for="email">
+            <span><?= $block->escapeHtml(__('personal code')) ?></span>
+        </label>
+        <div class="control">
+            <input type="text" name="personal_code" id="personal_code" title="<?php /* @escapeNotVerified */echo __('Personal Code') ?>" class="input-text" data-validate="{required:true}" autocomplete="off">
+        </div>
+    </div>
+</fieldset>
