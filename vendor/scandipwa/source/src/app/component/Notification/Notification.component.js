@@ -39,14 +39,12 @@ export class Notification extends PureComponent {
 
     componentDidMount() {
         const { notification: { msgType } } = this.props;
-
         // Make sure error notification stays a little longer
         if (msgType.toLowerCase() === ERROR_TYPE) {
             this.hideTimeout = setTimeout(() => this.hideNotification(), ERROR_NOTIFICATION_LIFETIME);
         } else {
             this.hideTimeout = setTimeout(() => this.hideNotification(), NOTIFICATION_LIFETIME);
         }
-
         CSS.setVariable(this.notification, 'animation-duration', `${ANIMATION_DURATION}ms`);
     }
 
@@ -95,12 +93,10 @@ export class Notification extends PureComponent {
         const { notification } = this.props;
         const { isNotificationVisible } = this.state;
         const { msgText, msgType } = notification;
-
         const mods = {
             type: msgType.toLowerCase(),
             is: isNotificationVisible ? 'opening' : 'closing'
         };
-
         return (
             <div block="Notification" mods={ mods } ref={ this.notification }>
                 <button block="Notification" elem="Button" onClick={ this.hideNotification }>Close</button>

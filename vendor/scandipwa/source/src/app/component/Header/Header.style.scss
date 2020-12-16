@@ -215,9 +215,12 @@
         padding: {
             left: 1.2rem;
             right: 2.4rem;
-            top: 1.2rem;
         };
-
+        @include desktop {
+            background-color: #000;
+            align-items: center;
+            flex-direction: row-reverse;
+        }
         @include mobile {
             padding: {
                 left: 1.4rem;
@@ -254,7 +257,14 @@
             justify-content: flex-end;
         }
     }
-
+    &-Wishlist{
+        left: 3rem;
+        border-right: 1px solid #dddddd;
+        z-index: 2;
+        >img{
+            padding: 1rem;
+        }
+    }
     &-Button {
         @include button-invisible;
 
@@ -316,9 +326,9 @@
                     height: auto;
                     margin-right: 1.44rem;
                     width: auto;
+                    padding-bottom: 1rem;
                 }
             }
-
             &_searchClear {
                 @include clear-search-button;
             }
@@ -357,13 +367,15 @@
             align-items: center;
             display: flex;
         }
-
         &Title {
             cursor: pointer;
             padding-right: .48rem;
             text-transform: uppercase;
             color: var(--header-color);
-
+            @include desktop{
+                text-transform: initial;
+                color: white;
+            }
             @include mobile {
                 padding-right: .56rem;
                 display: none;
@@ -385,7 +397,9 @@
                 margin-left: 2.8rem;
                 padding-right: 2.52rem;
             }
-
+            @include desktop {
+                border: none;
+            }
             @include tablet-portrait {
                 margin-left: 0;
             }
@@ -450,6 +464,9 @@
 
         @include desktop {
             @include logo-visible;
+            right: initial;
+            width: 108px;
+            height: 32px;
         }
 
         &_isVisible {

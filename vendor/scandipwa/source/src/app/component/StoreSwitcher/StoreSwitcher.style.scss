@@ -26,7 +26,6 @@
         --input-padding: 1.4rem;
         margin-bottom: 1.4rem;
     }
-
     select,
     select:hover,
     select:focus {
@@ -45,13 +44,15 @@
         color: var(--store-switcher-title-color);
         cursor: pointer;
         font-size: 1.2rem;
-
+        @include desktop {
+            color: white;
+        }
         @include mobile {
             font-size: 1.4rem;
         }
 
         &::after {
-            content: '';
+            content: "";
             position: absolute;
             right: -12px;
             top: 8px;
@@ -63,6 +64,9 @@
             transition: transform 200ms ease-in-out;
             transform: rotate(180deg);
             will-change: transform;
+            @include desktop{
+                border-bottom: 3px solid white;
+            }
         }
 
         &_isOpen {

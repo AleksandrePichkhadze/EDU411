@@ -24,7 +24,6 @@ export class MyAccountCustomerTable extends KeyValueTable {
 
     get dataPairArray() {
         const { customer } = this.props;
-        console.log(customer)
         return [
             {
                 key: 'firstname',

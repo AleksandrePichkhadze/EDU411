@@ -157,13 +157,6 @@ export class SearchField extends PureComponent {
             onSearchBarFocus,
             isActive
         } = this.props;
-
-        const { showSearch } = this.state;
-
-        if (!showSearch) {
-            return null;
-        }
-
         return (
             <div
               block="SearchField"
@@ -180,6 +173,7 @@ export class SearchField extends PureComponent {
                   value={ searchCriteria }
                   mods={ { isActive } }
                   autoComplete="off"
+                  placeholder="Search..."
                 />
                 <div
                   block="SearchField"
@@ -189,13 +183,6 @@ export class SearchField extends PureComponent {
                   onClick={ this.onIconClick }
                   aria-label={ __('Search') }
                 />
-                <Suspense fallback={ this.renderOverlayFallback() }>
-                    <SearchOverlay
-                      isHideOverlay
-                      clearSearch={ this.clearSearch }
-                      searchCriteria={ searchCriteria }
-                    />
-                </Suspense>
             </div>
         );
     }
@@ -231,14 +218,13 @@ export class SearchField extends PureComponent {
     renderDesktopContent() {
         const { device } = this.props;
         const { showSearch } = this.state;
-
         if (device.isMobile) {
             return null;
         }
 
         return (
             <>
-                { this.renderSearchIcon() }
+                
                 <div
                   block="SearchField"
                   elem="SearchWrapper"

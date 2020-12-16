@@ -24,7 +24,7 @@ import { DeviceType } from 'Type/Device';
 import { isSignedIn as isSignedInWithToken } from 'Util/Auth';
 import history from 'Util/History';
 import { appendWithStoreCode, setQueryParams } from 'Util/Url';
-
+import { showNotification } from 'Store/Notification/Notification.action';
 import Header from './Header.component';
 import {
     CART,
@@ -56,7 +56,8 @@ export const mapDispatchToProps = (dispatch) => ({
     showOverlay: (overlayKey) => dispatch(toggleOverlayByKey(overlayKey)),
     hideActiveOverlay: () => dispatch(hideActiveOverlay()),
     setNavigationState: (stateName) => dispatch(changeNavigationState(TOP_NAVIGATION_TYPE, stateName)),
-    goToPreviousNavigationState: () => dispatch(goToPreviousNavigationState(TOP_NAVIGATION_TYPE))
+    goToPreviousNavigationState: () => dispatch(goToPreviousNavigationState(TOP_NAVIGATION_TYPE)),
+    showNotification: (type, message) => dispatch(showNotification(type, message))
 });
 
 export const DEFAULT_HEADER_STATE = {
@@ -106,6 +107,7 @@ export class HeaderContainer extends NavigationAbstractContainer {
         onMinicartButtonClick: this.onMinicartButtonClick.bind(this),
         onOkButtonClick: this.onOkButtonClick.bind(this),
         onCancelButtonClick: this.onCancelButtonClick.bind(this),
+        onWishlistClick: this.onWishlistClick.bind(this),
         onSearchOutsideClick: this.onSearchOutsideClick.bind(this),
         onMyAccountOutsideClick: this.onMyAccountOutsideClick.bind(this),
         onMinicartOutsideClick: this.onMinicartOutsideClick.bind(this),
@@ -354,7 +356,7 @@ export class HeaderContainer extends NavigationAbstractContainer {
             });
         });
     }
-
+   
     onMyAccountOutsideClick() {
         const {
             goToPreviousNavigationState,
@@ -432,6 +434,14 @@ export class HeaderContainer extends NavigationAbstractContainer {
         }
 
         history.push(appendWithStoreCode(`/${ CART }`));
+    }
+    onWishlistClick() {
+        const { isSignedIn, showNotification } = this.props
+        if(isSignedIn){
+        history.push(appendWithStoreCode('/my-account/my-wishlist'));
+        return;
+    }
+        showNotification('info', "You must login or register to add items to your wishlist", false);
     }
 
     onMinicartOutsideClick() {

@@ -85,6 +85,7 @@
             max-width: var(--content-wrapper-width);
             width: 100%;
             margin: auto;
+            left: calc(var(--header-logo-width) + 20px);
             pointer-events: none;
         }
     }

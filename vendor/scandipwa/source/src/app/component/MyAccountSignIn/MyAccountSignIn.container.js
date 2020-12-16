@@ -107,7 +107,6 @@ export class MyAccountSignInContainer extends PureComponent {
             onSignIn,
             setLoadingState
         } = this.props;
-
         try {
             await signIn(fields);
             onSignIn();

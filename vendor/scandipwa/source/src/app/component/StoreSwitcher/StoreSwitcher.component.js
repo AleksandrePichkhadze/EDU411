@@ -43,7 +43,6 @@ export class StoreSwitcher extends PureComponent {
     renderStoreList = (item) => {
         const { handleStoreSelect } = this.props;
         const { value } = item;
-
         return (
             <StoreItems
               key={ value }
@@ -108,14 +107,13 @@ export class StoreSwitcher extends PureComponent {
     render() {
         const { storeList, device } = this.props;
 
-        if (storeList.length <= 1) {
-            return null;
-        }
-
         if (device.isMobile) {
+            if (storeList.length <= 1) {
+                return null;
+            }
             return this.renderMobileStoreSwitcher();
         }
-
+        
         return this.renderDesktopStoreSwitcher();
     }
 }

@@ -30,7 +30,6 @@ export class NotificationList extends PureComponent {
 
     render() {
         const { onHideNotification, notifications } = this.props;
-
         return (
             <div block="NotificationList">
                 { Object.keys(notifications).map((id) => (

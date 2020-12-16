@@ -11,13 +11,12 @@
  * @link https://github.com/scandipwa/base-theme
  */
 
-import PropTypes from 'prop-types';
+import PropTypes, { func } from 'prop-types';
 import { createRef, lazy, Suspense } from 'react';
-
 import ClickOutside from 'Component/ClickOutside';
-import CmsBlock from 'Component/CmsBlock';
 import Link from 'Component/Link';
 import Logo from 'Component/Logo';
+import { showNotification } from 'Store/Notification/Notification.action';
 import Menu from 'Component/Menu';
 import { CUSTOMER_ACCOUNT_OVERLAY_KEY } from 'Component/MyAccountOverlay/MyAccountOverlay.config';
 import NavigationAbstract from 'Component/NavigationAbstract/NavigationAbstract.component';
@@ -32,7 +31,9 @@ import { isSignedIn } from 'Util/Auth';
 import CSS from 'Util/CSS';
 import media from 'Util/Media';
 import { LOGO_MEDIA } from 'Util/Media/Media';
-
+import logo from './Icons/Bitmap.png';
+import shopbag from './Icons/shopbag.png';
+import heart_icon from './Icons/heart-outline.png';
 import {
     CART,
     CART_EDITING,
@@ -183,7 +184,6 @@ export class Header extends NavigationAbstract {
         close: this.renderCloseButton.bind(this),
         title: this.renderTitle.bind(this),
         logo: this.renderLogo.bind(this),
-        account: this.renderAccount.bind(this),
         minicart: this.renderMinicart.bind(this),
         search: this.renderSearchField.bind(this),
         clear: this.renderClearButton.bind(this),
@@ -286,12 +286,12 @@ export class Header extends NavigationAbstract {
             header_logo_src,
             logo_alt,
             logo_height,
-            logo_width
+            logo_width,
+            device
         } = this.props;
-
         CSS.setVariable(this.logoRef, 'header-logo-height', `${logo_height}px`);
-        CSS.setVariable(this.logoRef, 'header-logo-width', `${logo_width}px`);
-
+        CSS.setVariable(this.logoRef, 'header-logo-width', `${logo_width}px`);    
+        if(device.isMobile){
         return (
             <Logo
               src={ media(header_logo_src, LOGO_MEDIA) }
@@ -299,15 +299,22 @@ export class Header extends NavigationAbstract {
               title={ logo_alt }
             />
         );
+        }
+                return (
+            <Logo
+              src={ logo }
+              alt={ logo_alt }
+              title={ logo_alt }
+            />
+        );
     }
 
     renderLogo(isVisible = false) {
-        const { isLoading } = this.props;
+        const { isLoading} = this.props;
 
         if (isLoading) {
             return null;
         }
-
         return (
             <Link
               to="/"
@@ -354,7 +361,7 @@ export class Header extends NavigationAbstract {
         );
     }
 
-    renderAccountButton(isVisible) {
+    renderAccountButton() {
         const {
             onMyAccountButtonClick
         } = this.props;
@@ -372,13 +379,8 @@ export class Header extends NavigationAbstract {
                   block="Header"
                   elem="MyAccountTitle"
                 >
-                    { __('Account') }
+                    { isSignedIn() ? __('My Account') : __("Sign In") }
                 </div>
-                <div
-                  block="Header"
-                  elem="Button"
-                  mods={ { isVisible, type: 'account' } }
-                />
             </button>
         );
     }
@@ -458,7 +460,8 @@ export class Header extends NavigationAbstract {
 
     renderMinicartButton() {
         const {
-            onMinicartButtonClick
+            onMinicartButtonClick,
+            device
         } = this.props;
 
         return (
@@ -472,13 +475,9 @@ export class Header extends NavigationAbstract {
                   block="Header"
                   elem="MinicartTitle"
                 >
-                    { __('Cart') }
+                    { device.isMobile ? __('Cart') : __("")}
                 </span>
-                <span
-                  aria-label="Minicart"
-                  block="Header"
-                  elem="MinicartIcon"
-                />
+                <img src={shopbag} style={{width: '25px', height: '25px'}}/>
                 { this.renderMinicartItemsQty() }
             </button>
         );
@@ -566,7 +565,21 @@ export class Header extends NavigationAbstract {
             </button>
         );
     }
-
+    renderWishlistButton(){
+        const { onWishlistClick } = this.props;
+        return(
+            <button
+            aria-label="Go to my wishlist"
+            key="WishlistIcon"
+            block="Header"
+            elem="Wishlist"
+            onClick={ onWishlistClick }
+          >
+             
+                    <img src={heart_icon}/>
+                </button>
+        )
+    }
     renderCancelButton(isVisible = false) {
         const { onCancelButtonClick } = this.props;
 
@@ -586,30 +599,6 @@ export class Header extends NavigationAbstract {
         );
     }
 
-    renderContacts() {
-        const { header_content: { contacts_cms } = {} } = window.contentConfiguration;
-
-        if (contacts_cms) {
-            return (
-                <CmsBlock identifier={ contacts_cms } />
-            );
-        }
-
-        // following strings are not translated, use CMS blocks to do it
-        return (
-            <dl block="contacts-wrapper">
-                <dt>{ __('Telephone:') }</dt>
-                <dd>
-                    <a href="tel:983829842">+0 (983) 829842</a>
-                </dd>
-                <dt>{ __('Mail:') }</dt>
-                <dd>
-                    <a href="mailto:info@scandipwa.com">info@scandipwa.com</a>
-                </dd>
-            </dl>
-        );
-    }
-
     renderTopMenu() {
         const { device } = this.props;
         if (device.isMobile) {
@@ -618,9 +607,7 @@ export class Header extends NavigationAbstract {
 
         return (
             <div block="Header" elem="TopMenu">
-                <div block="Header" elem="Contacts">
-                    { this.renderContacts() }
-                </div>
+                { this.renderAccount() }
                 <div block="Header" elem="Switcher">
                     <StoreSwitcher />
                 </div>
@@ -640,8 +627,20 @@ export class Header extends NavigationAbstract {
             // hide edit button on desktop
             stateMap[CUSTOMER_WISHLIST].edit = false;
             stateMap[CART_OVERLAY].edit = false;
+            this.renderMap = {
+                cancel: this.renderCancelButton.bind(this),
+                back: this.renderBackButton.bind(this),
+                close: this.renderCloseButton.bind(this),
+                title: this.renderTitle.bind(this),
+                logo: this.renderLogo.bind(this),
+                search: this.renderSearchField.bind(this),
+                wishlist: this.renderWishlistButton.bind(this),
+                minicart: this.renderMinicart.bind(this),
+                clear: this.renderClearButton.bind(this),
+                edit: this.renderEditButton.bind(this),
+                ok: this.renderOkButton.bind(this)
+            };
         }
-
         return (
             <section block="Header" elem="Wrapper">
                 <header

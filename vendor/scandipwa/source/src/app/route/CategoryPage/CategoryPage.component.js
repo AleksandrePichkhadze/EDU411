@@ -9,23 +9,23 @@
  * @link https://github.com/scandipwa/base-theme
  */
 
-import PropTypes from 'prop-types';
-import { PureComponent } from 'react';
-import CategoryDetails from 'Component/CategoryDetails'
-import CategoryTypes from './CategoryTypes/CategoryTypes.component'
-import CategoryFilterOverlay from 'Component/CategoryFilterOverlay';
-import { CATEGORY_FILTER_OVERLAY_ID } from 'Component/CategoryFilterOverlay/CategoryFilterOverlay.config';
-import CategoryItemsCount from 'Component/CategoryItemsCount';
-import CategoryProductList from 'Component/CategoryProductList';
-import CategorySort from 'Component/CategorySort';
-import ContentWrapper from 'Component/ContentWrapper';
-import Html from 'Component/Html';
-import { CategoryTreeType } from 'Type/Category';
-import { DeviceType } from 'Type/Device';
-import { FilterInputType, FilterType } from 'Type/ProductList';
+import PropTypes from "prop-types";
+import { PureComponent } from "react";
+import CategoryDetails from "Component/CategoryDetails";
+import CategoryTypes from "./CategoryTypes/CategoryTypes.component";
+import CategoryFilterOverlay from "Component/CategoryFilterOverlay";
+import { CATEGORY_FILTER_OVERLAY_ID } from "Component/CategoryFilterOverlay/CategoryFilterOverlay.config";
+import CategoryItemsCount from "Component/CategoryItemsCount";
+import CategoryProductList from "Component/CategoryProductList";
+import CategorySort from "Component/CategorySort";
+import ContentWrapper from "Component/ContentWrapper";
+import Html from "Component/Html";
+import { CategoryTreeType } from "Type/Category";
+import { DeviceType } from "Type/Device";
+import { FilterInputType, FilterType } from "Type/ProductList";
 
-import './CategoryPage.style';
-import './CategoryPage.style.scss';
+import "./CategoryPage.style";
+import "./CategoryPage.style.scss";
 
 /** @namespace Route/CategoryPage/Component */
 export class CategoryPage extends PureComponent {
@@ -33,14 +33,11 @@ export class CategoryPage extends PureComponent {
         category: CategoryTreeType.isRequired,
         filters: PropTypes.objectOf(PropTypes.shape).isRequired,
         sortFields: PropTypes.shape({
-            options: PropTypes.array
+            options: PropTypes.array,
         }).isRequired,
         selectedSort: PropTypes.shape({
-            sortDirection: PropTypes.oneOf([
-                'ASC',
-                'DESC'
-            ]),
-            sortKey: PropTypes.string
+            sortDirection: PropTypes.oneOf(["ASC", "DESC"]),
+            sortKey: PropTypes.string,
         }).isRequired,
         onSortChange: PropTypes.func.isRequired,
         toggleOverlayByKey: PropTypes.func.isRequired,
@@ -51,7 +48,7 @@ export class CategoryPage extends PureComponent {
         isMatchingListFilter: PropTypes.bool,
         isMatchingInfoFilter: PropTypes.bool,
         totalPages: PropTypes.number,
-        device: DeviceType.isRequired
+        device: DeviceType.isRequired,
     };
 
     static defaultProps = {
@@ -59,7 +56,7 @@ export class CategoryPage extends PureComponent {
         isMatchingListFilter: false,
         isMatchingInfoFilter: false,
         totalPages: 1,
-        search: ''
+        search: "",
     };
 
     onFilterButtonClick = this.onFilterButtonClick.bind(this);
@@ -72,22 +69,14 @@ export class CategoryPage extends PureComponent {
     renderCategoryDetails() {
         const { category } = this.props;
 
-        return (
-            <CategoryDetails
-              category={ category }
-            />
-        );
+        return <CategoryDetails category={category} />;
     }
-    renderCategoryType(){
-        const {category} = this.props;
-        if(!category.category_type){
+    renderCategoryType() {
+        const { category } = this.props;
+        if (!category.category_type) {
             return null;
         }
-        return(
-            <CategoryTypes
-            category = {category}
-            />
-        )
+        return <CategoryTypes category={category} />;
     }
 
     renderFilterButton() {
@@ -98,39 +87,26 @@ export class CategoryPage extends PureComponent {
         }
 
         return (
-            <button
-              block="CategoryPage"
-              elem="Filter"
-              onClick={ this.onFilterButtonClick }
-            >
-                { __('Filter') }
+            <button block="CategoryPage" elem="Filter" onClick={this.onFilterButtonClick}>
+                {__("Filter")}
             </button>
         );
     }
 
     renderFilterOverlay() {
-        const {
-            filters,
-            selectedFilters,
-            isMatchingInfoFilter
-        } = this.props;
+        const { filters, selectedFilters, isMatchingInfoFilter } = this.props;
 
         return (
             <CategoryFilterOverlay
-              availableFilters={ filters }
-              customFiltersValues={ selectedFilters }
-              isMatchingInfoFilter={ isMatchingInfoFilter }
+                availableFilters={filters}
+                customFiltersValues={selectedFilters}
+                isMatchingInfoFilter={isMatchingInfoFilter}
             />
         );
     }
 
     renderCategorySort() {
-        const {
-            sortFields,
-            selectedSort,
-            onSortChange,
-            isMatchingInfoFilter
-        } = this.props;
+        const { sortFields, selectedSort, onSortChange, isMatchingInfoFilter } = this.props;
 
         const { options = {} } = sortFields;
         const updatedSortFields = Object.values(options).map(({ value: id, label }) => ({ id, label }));
@@ -138,11 +114,11 @@ export class CategoryPage extends PureComponent {
 
         return (
             <CategorySort
-              isMatchingInfoFilter={ isMatchingInfoFilter }
-              onSortChange={ onSortChange }
-              sortFields={ updatedSortFields }
-              sortKey={ sortKey }
-              sortDirection={ sortDirection }
+                isMatchingInfoFilter={isMatchingInfoFilter}
+                onSortChange={onSortChange}
+                sortFields={updatedSortFields}
+                sortKey={sortKey}
+                sortDirection={sortDirection}
             />
         );
     }
@@ -158,11 +134,7 @@ export class CategoryPage extends PureComponent {
             return null;
         }
 
-        return (
-            <CategoryItemsCount
-              isMatchingListFilter={ isMatchingListFilter }
-            />
-        );
+        return <CategoryItemsCount isMatchingListFilter={isMatchingListFilter} />;
     }
 
     renderCategoryProductList() {
@@ -172,26 +144,28 @@ export class CategoryPage extends PureComponent {
             selectedSort,
             selectedFilters,
             isMatchingListFilter,
-            isMatchingInfoFilter
+            isMatchingInfoFilter,
         } = this.props;
 
         return (
             <div block="CategoryPage" elem="ProductListWrapper">
-                { this.renderItemsCount(true) }
+                {this.renderItemsCount(true)}
                 <CategoryProductList
-                  filter={ filter }
-                  search={ search }
-                  sort={ selectedSort }
-                  selectedFilters={ selectedFilters }
-                  isMatchingListFilter={ isMatchingListFilter }
-                  isMatchingInfoFilter={ isMatchingInfoFilter }
+                    filter={filter}
+                    search={search}
+                    sort={selectedSort}
+                    selectedFilters={selectedFilters}
+                    isMatchingListFilter={isMatchingListFilter}
+                    isMatchingInfoFilter={isMatchingInfoFilter}
                 />
             </div>
         );
     }
 
     renderCmsBlock() {
-        const { category: { cms_block } } = this.props;
+        const {
+            category: { cms_block },
+        } = this.props;
 
         if (!cms_block) {
             return null;
@@ -204,11 +178,8 @@ export class CategoryPage extends PureComponent {
         }
 
         return (
-            <div
-              block="CategoryPage"
-              elem="CMS"
-            >
-                <Html content={ content } />
+            <div block="CategoryPage" elem="CMS">
+                <Html content={content} />
             </div>
         );
     }
@@ -216,16 +187,16 @@ export class CategoryPage extends PureComponent {
     renderContent() {
         return (
             <>
-                { this.renderFilterOverlay() }
-                { this.renderCategoryDetails() }
-                { this.renderCategoryType() }
-                { this.renderCmsBlock() }
+                {this.renderFilterOverlay()}
+                {this.renderCategoryDetails()}
+                {this.renderCategoryType()}
+                {this.renderCmsBlock()}
                 <aside block="CategoryPage" elem="Miscellaneous">
-                    { this.renderItemsCount() }
-                    { this.renderCategorySort() }
-                    { this.renderFilterButton() }
+                    {this.renderItemsCount()}
+                    {this.renderCategorySort()}
+                    {this.renderFilterButton()}
                 </aside>
-                { this.renderCategoryProductList() }
+                {this.renderCategoryProductList()}
             </>
         );
     }
@@ -234,13 +205,13 @@ export class CategoryPage extends PureComponent {
         return (
             <main block="CategoryPage">
                 <ContentWrapper
-                  wrapperMix={ {
-                      block: 'CategoryPage',
-                      elem: 'Wrapper'
-                  } }
-                  label="Category page"
+                    wrapperMix={{
+                        block: "CategoryPage",
+                        elem: "Wrapper",
+                    }}
+                    label="Category page"
                 >
-                    { this.renderContent() }
+                    {this.renderContent()}
                 </ContentWrapper>
             </main>
         );
